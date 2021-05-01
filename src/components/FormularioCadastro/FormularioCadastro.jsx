@@ -7,16 +7,22 @@ class FormularioCadastro extends Component {
         this.initialState = {
             txtTitulo: '',
             txtNota: '',
-            categoria : "Sem Categoria"
+            categoria: ""
         }
-
-
         this.state = this.initialState
-
         this.handleChangeTitulo = this.handleChangeTitulo.bind(this);
         this.handleChangeNota = this.handleChangeNota.bind(this);
         this.handleChangeCategoria = this.handleChangeCategoria.bind(this);
         this.addNota = this.addNota.bind(this);
+        this.novaCategoria = this.novaCategoria.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.categorias.inscrever(this.novaCategoria)
+    }
+
+    novaCategoria(categoria){
+        this.setState({categoria})
     }
 
     handleChangeTitulo(e) {
@@ -24,6 +30,7 @@ class FormularioCadastro extends Component {
             txtTitulo: e.target.value
         })
     }
+
     handleChangeCategoria(e) {
         this.setState({
             categoria: e.target.value
@@ -40,11 +47,11 @@ class FormularioCadastro extends Component {
     addNota(e) {
         e.preventDefault()
         e.stopPropagation()
-        this.props.addNotas(this.state, this.categoria)
+        this.props.addNotas(this.state)
         this.setState(this.initialState)
     }
 
-     render() {
+    render() {
         const {txtTitulo, txtNota, categoria} = this.state
         return (
             <form className="form-cadastro ">
@@ -53,7 +60,7 @@ class FormularioCadastro extends Component {
                     onChange={this.handleChangeCategoria}
                 >
                     <option>Sem Categoria</option>
-                    {this.props.listCategorias.map((categoria, index) => {
+                    {this.props.categorias.itens.map((categoria, index) => {
                         return <option key={index}>{categoria}</option>
                     })}
                 </select>
